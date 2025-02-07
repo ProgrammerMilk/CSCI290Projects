@@ -59,6 +59,7 @@ public class Song implements Comparable<Song> {
          * @param title  the title of the song
          * @param lyrics the lyrics as a string with linefeeds embedded
          *               Private field constructors added by DS
+         * @Author Dylan
          */
         public Song(String artist, String title, String lyrics) {
 
@@ -72,6 +73,7 @@ public class Song implements Comparable<Song> {
          *
          * @return artist the author of the song
          *         Return statement added by DS
+         * @Author Dylan
          */
         public String getArtist() {
                 return artist;
@@ -81,6 +83,7 @@ public class Song implements Comparable<Song> {
          *
          * @return lyrics the lyrics as a string with linefeeds embedded
          *         Return statement added by DS
+         * @Author Dylan
          */
         public String getLyrics() {
                 return lyrics;
@@ -90,6 +93,7 @@ public class Song implements Comparable<Song> {
          *
          * @return title the title of the song
          *         Return statement added by DS
+         *  @Author Dylan
          */
         public String getTitle() {
                 return title;
@@ -101,6 +105,7 @@ public class Song implements Comparable<Song> {
          * 
          * @return a formatted string with comma and quotes added
          *         Return statement added with desired formatting by DS
+         * @Author Dylan
          */
         @Override
         public String toString() {
@@ -129,6 +134,7 @@ public class Song implements Comparable<Song> {
          * Creates an int variable with the value of comparing current artist and the
          * artist of song 2, if artist is less than result is negative, if greater than
          * result is positive, if 0 they are equal. DS
+         * @Author Dylan
          * 
          */
 

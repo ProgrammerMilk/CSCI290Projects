@@ -37,6 +37,7 @@ public class SongCollection {
      *
      * @param filename The path and filename to the datafile that we are using
      *                 must be set in the Project Properties as an argument.
+     * @Author Johnthan
      */
     public SongCollection(String filename) {
         try {
@@ -104,7 +105,7 @@ public class SongCollection {
             // Catchs any errors to prevent crashing
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
-            e.printStackTrace();
+            System.exit(1);
         }
 
         // use a try catch block

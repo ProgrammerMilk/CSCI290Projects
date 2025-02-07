@@ -4,6 +4,7 @@
  *                     Revision History (newest first)
  ************************************************************************
  * 2/3/2025 - Jonathan Peil - Removed the quotation marks around the outputted lyrics 
+ * 02/02/2025 - Junting - GUI set up and test
  * 1/21/2025 - Jonathan Peil - Finished creating the SongCollection class
  * 8.2016 - Anne Applin - formatting and JavaDoc skeletons added   
  * 2015 -   Prof. Bob Boothe - Starting code and main for testing  
@@ -36,6 +37,7 @@ public class SongCollection {
      *
      * @param filename The path and filename to the datafile that we are using
      *                 must be set in the Project Properties as an argument.
+     * @Johnathan
      */
     public SongCollection(String filename) {
         try {
@@ -103,7 +105,7 @@ public class SongCollection {
             // Catchs any errors to prevent crashing
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
-            e.printStackTrace();
+            System.exit(1);
         }
 
         // use a try catch block

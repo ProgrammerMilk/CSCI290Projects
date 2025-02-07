@@ -3,6 +3,8 @@
  * ****************************************************************************
  *                           Revision History
  * ****************************************************************************
+ * 02/07/2025 - Junting Zhang - Implement both findFront and findEnd using 
+ *                              binarySearch (commented out)
  *  02/06/2025 - Junting Zhang - fixed bugs in findFront()
  * 2/5/2025 - Dylan Sherwood - finished findFront()
  * 2/3/2025 - Jonathan Peil - Started creating findFront()
@@ -234,7 +236,107 @@ public class RaggedArrayList<E> implements Iterable<E> {
 
         return null; // when finished should return: new ListLoc(l1,l2);
     }
+    
+    
+//       /**
+//     * Implementation using binary search
+//     * find 1st matching entry
+//     * @param item the thing we are searching for a place to put.
+//     * @return ListLoc of 1st matching item or of 1st item greater than 
+//     * the item if no match this might be an unused slot at the end of a 
+//     * level 2 array
+//     * @Author Junting Zhang
+//     */
+//    public ListLoc findFront(E item) {
+//        int i = 0; // outer loop couter
+//        int index = -1;  // initial match index in L2 
+//        ListLoc listLoc;  // declare listLoc reference
+//        L2Array l2Array = (L2Array)l1Array[0];  // initial L2Array object
+//        
+//        // loop through each item in l1 array
+//        for (i =0; i < l1NumUsed; i++){
+//            l2Array = (L2Array)l1Array[i];  // get current l2 array object
+//           // using try and catch to prevent program crash when null is checked.
+//            try{
+//                // get match index 
+//                index = Arrays.binarySearch(l2Array.items, item, comp);
+//                // if item not found (index < 0), set index to the insertion point 
+//                if(index<0){
+//                    index = -(index+1);
+//                // if match found and more than one, return the earliest match in the sorted list
+//                }else if(index > 0 ){
+//                    int pre = index -1;
+//                    while(index >= 0 && comp.compare(l2Array.items[pre], item) == 0){
+//                        index = pre;
+//                        pre--;
+//                    }  
+//                }
+//                // else index  == 0, no left item can be checked, just return 0
+//                // get loction of l1 and l2
+//                listLoc = new ListLoc(i,index);
+//                return listLoc;
+//            }catch(Exception e){
+//                System.out.println("Skipping null value!");
+//            }         
+//        }
+//        // if item is larger than all the data , set insertion point to the end of the data set
+//        index = ((L2Array)l2Array).numUsed;
+//        listLoc = new ListLoc(i-1, index);
+//        return listLoc; 
+//    }
+    
+    
+//    /**
+//     * Implementation using binary search :  
+//     * find location after the last matching entry or if no match, it finds
+//     * the index of the next larger item this is the position to add a new 
+//     * entry this might be an unused slot at the end of a level 2 array
+//     *
+//     * @param item the thing we are searching for a place to put.
+//     * @return the location where this item should go
+//     * @Author Junting Zhang
+//     */
+//    public ListLoc findEnd(E item) {
+//        int i = 0; // outer loop couter
+//        int index = -1;  // initial match index in L2 
+//        ListLoc listLoc;  // declare listLoc reference
+//        L2Array l2Array = (L2Array)l1Array[0];  // initial L2Array object
+//        
+//        // loop through each item in l1 array
+//        for (i =0; i < l1NumUsed; i++){
+//            l2Array = (L2Array)l1Array[i];  // get current l2 array object
+//            
+//            try{
+//                // get match index or negative for item not found
+//                index = Arrays.binarySearch(l2Array.items, item, comp);
+//                // if item not found, get insertion point and return
+//                if(index<0){
+//                    index = -(index+1);
+//                    listLoc = new ListLoc(i,index);
+//                    return listLoc;  
+//                // if match found and more than one, retrun last match in the sorted list
+//                }else if(index > 0 ){
+//                    int next = index +1;
+//                    while(index >= 0 && comp.compare(l2Array.items[next], item) == 0){
+//                        index = next;
+//                        next++;
+//                    } 
+//                }
+//                // get the next index if last match found in the sorted array and return
+//                index = index+1;
+//                listLoc = new ListLoc(i,index);
+//                return listLoc;
+//            }catch(Exception e){
+//                System.out.println("Skipping null!");
+//            }         
+//        }
+//        // if item is larger than all the data , insert into end of the data set
+//        index = ((L2Array)l2Array).numUsed;
+//        listLoc = new ListLoc(i-1, index);
+//        return listLoc; 
+//    }
 
+    
     /**
      * add object after any other matching values findEnd will give the
      * insertion position
