@@ -4,6 +4,7 @@
  *                     Revision History (newest first)
  ************************************************************************
  * 2/3/2025 - Jonathan Peil - Removed the quotation marks around the outputted lyrics 
+ * 02/02/2025 - Junting - GUI set up and test
  * 1/21/2025 - Jonathan Peil - Finished creating the SongCollection class
  * 8.2016 - Anne Applin - formatting and JavaDoc skeletons added   
  * 2015 -   Prof. Bob Boothe - Starting code and main for testing  
