@@ -3,6 +3,7 @@
  * ****************************************************************************
  *                           Revision History
  * ****************************************************************************
+ *  02/06/2025 - Junting Zhang - fixed bugs in findFront()
  * 2/5/2025 - Dylan Sherwood - finished findFront()
  * 2/3/2025 - Jonathan Peil - Started creating findFront()
  * 8/2015 - Anne Applin - Added formatting and JavaDoc
@@ -189,13 +190,17 @@ public class RaggedArrayList<E> implements Iterable<E> {
      * @param item the thing we are searching for a place to put.
      * @return ListLoc of 1st matching item or of 1st item greater than the item
      * if no match this might be an unused slot at the end of a level 2 array
+     * @Author Dylan,Johnathan,Junting
      */
     public ListLoc findFront(E item) {
+        // @junting - initial l2Array
+        L2Array l2Array = (L2Array) l1Array[0];
+        // @junting - initial outer loop couner
+        int i = 0;
         // Loops through the Level 1 array that contains all the level 2 arrays JP
-        for (int i = 0; i < l1NumUsed; i++) {
+        for (i = 0; i < l1NumUsed; i++) {
             //Grabs the level 2 array at index i JP
-            L2Array l2Array = (L2Array) l1Array[i];
-
+            l2Array = (L2Array) l1Array[i];
             // Search within the Level 2 array for the first occurrence of the item JP
             for (int j = 0; j < l2Array.numUsed; j++) {
                 // If a match is found JP
@@ -204,25 +209,16 @@ public class RaggedArrayList<E> implements Iterable<E> {
                     return new ListLoc(i, j);
                 }
             }
-// if item is not found, check where it could be inserted
+            // if item is not found, check where it could be inserted
             for (int j = 0; j < l2Array.numUsed; j++) {
                 if (comp.compare(item, l2Array.items[j]) < 0) {
                     return new ListLoc(i, j);
                 }
-
-            }
-
-//        if the item was not found, check to insert at end DS
-            if (l2Array.numUsed < l2Array.items.length) {
-                return new ListLoc(i, l2Array.numUsed);
-
             }
         }
-
-        // when finished should return: new ListLoc(l1,l2);
-//        return null; DS commented out
-//      if there was no suitable spot for the item, insert it in first available spott
-        return new ListLoc(l1NumUsed, 0);
+        // @junting- if target item comparison is larger than rest of the data, 
+        // set insertion point to the end of last sub array
+        return new ListLoc(i - 1, l2Array.numUsed);
     }
 
     /**
