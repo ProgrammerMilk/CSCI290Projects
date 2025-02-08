@@ -211,7 +211,7 @@ public class RaggedArrayList<E> implements Iterable<E> {
                     return new ListLoc(i, j);
                 }
             }
-            // if item is not found, check where it could be inserted
+            // if item is not found, check where it could be inserted DS
             for (int j = 0; j < l2Array.numUsed; j++) {
                 if (comp.compare(item, l2Array.items[j]) < 0) {
                     return new ListLoc(i, j);
@@ -221,9 +221,12 @@ public class RaggedArrayList<E> implements Iterable<E> {
         // @junting- if target item comparison is larger than rest of the data, 
         // set insertion point to the end of last sub array
         return new ListLoc(i - 1, l2Array.numUsed);
+        
+        
     }
 
     /**
+     * @Dylan
      * find location after the last matching entry or if no match, it finds the
      * index of the next larger item this is the position to add a new entry
      * this might be an unused slot at the end of a level 2 array
@@ -231,11 +234,60 @@ public class RaggedArrayList<E> implements Iterable<E> {
      * @param item the thing we are searching for a place to put.
      * @return the location where this item should go
      */
-    public ListLoc findEnd(E item) {
-        // TO DO in part 3
+       public ListLoc findEnd(E item) {
+    // call findFront to locate the first item or insertion point DS
+    ListLoc loc = findFront(item);
 
-        return null; // when finished should return: new ListLoc(l1,l2);
+    //Check for item if item is not there, then this is the insetion point DS
+    if (loc.level1Index < 0 || loc.level1Index >= l1NumUsed) {
+        return loc;
     }
+    //find the level 2 array at the level 1 index DS
+    L2Array currentArray = (L2Array) l1Array[loc.level1Index];
+    //checks that level 2 index is in range and unused DS
+    if (loc.level2Index >= currentArray.numUsed ||
+    //check for a match DS 
+        comp.compare(item, currentArray.items[loc.level2Index]) != 0) {
+        return loc;
+    }
+
+    
+    //create two ints to hold our current indexes DS
+    int currentL1 = loc.level1Index;
+    int currentL2 = loc.level2Index;
+
+    //check thatthe next index is in bounds and that it is equal to the item DS
+    //if both conditions are true increment our position DS 
+    while (currentL2 + 1 < currentArray.numUsed &&
+           comp.compare(item, currentArray.items[currentL2 + 1]) == 0) {
+        currentL2++;
+    }
+
+    //check for other inner array duplicates DS
+    while (currentL1 + 1 < l1NumUsed) {
+        L2Array nextArray = (L2Array) l1Array[currentL1 + 1];
+    //if the first item is equal check for duplicates DS
+        if (nextArray.numUsed > 0 && comp.compare(item, nextArray.items[0]) == 0) {
+    //move to the next level-2 array DS
+            currentL1++;  
+    //reset the counter DS
+            currentL2 = 0;  
+    //check the next array DS
+            while (currentL2 + 1 < nextArray.numUsed &&
+                   comp.compare(item, nextArray.items[currentL2 + 1]) == 0) {
+                currentL2++;
+            }
+    //set the next array DS            
+            currentArray = nextArray;
+        } else {
+    //if the next inner array does not contrain the item stop looking DS        
+            break;
+        }
+    }
+    //after searching every array, the next position past the last search
+    //will be the insertion point  DS   
+    return new ListLoc(currentL1, currentL2 + 1);
+}
     
     
 //       /**
