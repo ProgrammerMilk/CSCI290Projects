@@ -3,8 +3,12 @@
  * ****************************************************************************
  *                           Revision History
  * ****************************************************************************
+
+ * 02/08/2025 - junting Zhang - updated findEnd, added stop condition in the 
+ *                              nested while loop instead of using "break".
  * 02/07/2025 - Junting Zhang - Implement both findFront and findEnd using 
  *                              binarySearch (commented out)
+ *  02/07/2025 - Dylan Sherwood - implement findEnd()
  *  02/06/2025 - Junting Zhang - fixed bugs in findFront()
  * 2/5/2025 - Dylan Sherwood - finished findFront()
  * 2/3/2025 - Jonathan Peil - Started creating findFront()
@@ -226,13 +230,14 @@ public class RaggedArrayList<E> implements Iterable<E> {
     }
 
     /**
-     * @Dylan
+     * 
      * find location after the last matching entry or if no match, it finds the
      * index of the next larger item this is the position to add a new entry
      * this might be an unused slot at the end of a level 2 array
      *
      * @param item the thing we are searching for a place to put.
      * @return the location where this item should go
+     * @Author Dylan
      */
        public ListLoc findEnd(E item) {
     // call findFront to locate the first item or insertion point DS
@@ -264,7 +269,8 @@ public class RaggedArrayList<E> implements Iterable<E> {
     }
 
     //check for other inner array duplicates DS
-    while (currentL1 + 1 < l1NumUsed) {
+    boolean found = true;
+    while (found && currentL1 + 1 < l1NumUsed) {
         L2Array nextArray = (L2Array) l1Array[currentL1 + 1];
     //if the first item is equal check for duplicates DS
         if (nextArray.numUsed > 0 && comp.compare(item, nextArray.items[0]) == 0) {
@@ -281,7 +287,7 @@ public class RaggedArrayList<E> implements Iterable<E> {
             currentArray = nextArray;
         } else {
     //if the next inner array does not contrain the item stop looking DS        
-            break;
+            found = false;
         }
     }
     //after searching every array, the next position past the last search
@@ -292,6 +298,7 @@ public class RaggedArrayList<E> implements Iterable<E> {
     
 //       /**
 //     * Implementation using binary search
+//     *  
 //     * find 1st matching entry
 //     * @param item the thing we are searching for a place to put.
 //     * @return ListLoc of 1st matching item or of 1st item greater than 
@@ -328,7 +335,7 @@ public class RaggedArrayList<E> implements Iterable<E> {
 //                listLoc = new ListLoc(i,index);
 //                return listLoc;
 //            }catch(Exception e){
-//                System.out.println("Skipping null value!");
+//                System.out.println("Checking null!");
 //            }         
 //        }
 //        // if item is larger than all the data , set insertion point to the end of the data set
@@ -339,7 +346,8 @@ public class RaggedArrayList<E> implements Iterable<E> {
     
     
 //    /**
-//     * Implementation using binary search :  
+//     * Implementation using binary search :
+//     *  
 //     * find location after the last matching entry or if no match, it finds
 //     * the index of the next larger item this is the position to add a new 
 //     * entry this might be an unused slot at the end of a level 2 array
@@ -379,7 +387,7 @@ public class RaggedArrayList<E> implements Iterable<E> {
 //                listLoc = new ListLoc(i,index);
 //                return listLoc;
 //            }catch(Exception e){
-//                System.out.println("Skipping null!");
+//                System.out.println("Checking null!");
 //            }         
 //        }
 //        // if item is larger than all the data , insert into end of the data set
