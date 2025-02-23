@@ -4,7 +4,7 @@
  *                           Revision History
  * ****************************************************************************
  * 
- * 
+ * 2/22/2025 - Jonathan Peil - Fixed add method coding logic
  * 2/19/2025 - Jonathan Peil - Started working on the add method
  * 02/08/2025 - junting Zhang - updated findEnd, added stop condition in the 
  *                              nested while loop instead of using "break".
@@ -412,58 +412,64 @@ public class RaggedArrayList<E> implements Iterable<E> {
             ListLoc loc = findEnd(item); // Finds the last matching item or the correct position to insert JP
             L2Array targetArray = (L2Array) l1Array[loc.level1Index]; // Retrieves the Level 2 array at the determined L1 index JP
 
-            //Checks to see if there is space in the Level 2 Array for shifting and inserting JP
-            if (targetArray.numUsed < targetArray.items.length){
-                // Shifts elements to the right to make space for the new item
-                System.arraycopy(targetArray.items, loc.level2Index, targetArray.items, loc.level2Index + 1, targetArray.numUsed - loc.level2Index);
-                
-                // Insert the item at the correct position
-                targetArray.items[loc.level2Index] = item;
-                // Increase the number of used slots in this L2Array
-                targetArray.numUsed++;
-                // Increases the overall size of the data structure
-                size++;
-                //Returns true after the item has been successfully added
-                return true;  
-            }
+
+            // Shifts elements to the right to make space for the new item JP
+            System.arraycopy(targetArray.items, loc.level2Index, targetArray.items, loc.level2Index + 1, targetArray.numUsed - loc.level2Index);
+            // Insert the item at the correct position JP
+            targetArray.items[loc.level2Index] = item;
+            // Increase the number of used slots in this L2Array JP
+            targetArray.numUsed++; 
             
-            // If there is no space in the L2Array, the array is split into 2
-            if (targetArray.items.length == targetArray.numUsed) {
-                //Determines the midpoint to split at
-                int mid = targetArray.numUsed / 2;
-        
-                //Creates a new L2Array with the same size
-                L2Array newArray = new L2Array(targetArray.items.length);
-                
-                //Move the second half of elements into the new array
-                System.arraycopy(targetArray.items, mid, newArray.items, 0, targetArray.numUsed - mid);
-                
-                //Set the new array's size
-                newArray.numUsed = targetArray.numUsed - mid;
-                
-                //Adjusts the original array's size
-                targetArray.numUsed = mid;
+            //Checks to see if the array needs to be split or doubled JP
+            if (targetArray.numUsed == targetArray.items.length){
+                //If the L2Array is full and it's size is equal to the L1Array size, we split JP
+                if (targetArray.items.length == l1Array.length) {
+                    //Determines the midpoint to split at JP
+                    int mid = targetArray.numUsed / 2;
+
+                    //Creates a new L2Array with the same size JP
+                    L2Array newArray = new L2Array(targetArray.items.length);
+
+                    //Move the second half of elements into the new array JP
+                    System.arraycopy(targetArray.items, mid, newArray.items, 0, targetArray.numUsed - mid);
+
+                    //Set the new array's size JP
+                    newArray.numUsed = targetArray.numUsed - mid;
+                    
+                    // Clears the moved elements in the original L2Array JP
+                    for (int i = mid; i < targetArray.numUsed; i++){
+                        targetArray.items[i] = null;
+                    }
+                    //Adjusts the original array's size JP
+                    targetArray.numUsed = mid;
 
 
-                // Shift the L1 Array to make space for the L2Array
-                if (l1NumUsed + 1 >= l1Array.length){
-                    //Double the size of the L1Array if necessary
-                    l1Array = Arrays.copyOf(l1Array, l1Array.length * 2);
+                    // Shift the L1 Array to make space for the L2Array JP
+                    if (l1NumUsed + 1 >= l1Array.length){
+                        //Double the size of the L1Array if necessary JP
+                        l1Array = Arrays.copyOf(l1Array, l1Array.length * 2);
+                    }
+                    
+                    // Shift elements in L1Array to create space for the new L2Array JP
+                    System.arraycopy(l1Array, loc.level1Index + 1, l1Array, loc.level1Index + 2, l1NumUsed - loc.level1Index);
+                    //Inset the new L2Array at the correct position JP
+                    l1Array[loc.level1Index + 1] = newArray;
+                    //Increase the count of used L1 elements JP
+                    l1NumUsed++;     
+                    
+                // If the L2Array is full but is smaller than the L1Array, L2Array gets doubled JP
+                } else {
+                    //Creates a new L1Array that is double the size of the current L2Array
+                    L2Array newArray = new L2Array(targetArray.items.length * 2);
+                    // Copies all elements from the target array into the newly created larger array JP 
+                    System.arraycopy(targetArray.items, 0, newArray.items, 0, targetArray.numUsed);
+                    //Sets the number of used elements from the targetArray to match the newArray JP
+                    newArray.numUsed = targetArray.numUsed;
+                    //Assigns the new L2 array to the L1 array JP
+                    l1Array[loc.level1Index] = newArray;  
                 }
-                
-                // Shift elements in L1Array to create space for the new L2Array
-                System.arraycopy(l1Array, loc.level1Index + 1, l1Array, loc.level1Index + 2, l1NumUsed - loc.level1Index);
-                
-                //Inset the new L2Array at the correct position
-                l1Array[loc.level1Index + 1] = newArray;
-                //Increase the count of used L1 elements
-                l1NumUsed++;
-                
-                return add(item);
             }
-            
             return true;
-               
     }
     
 
